@@ -4,6 +4,11 @@ const logoImage = document.getElementById("logo-img")
 const cardPreview = document.getElementById("card-preview")
 const cardNumberInput = document.getElementById("card-number")
 const CARD_NUMBER_LENGTH = 16
+const cardIssuer = document.getElementById("issuer")
+const cardBrand = document.getElementById("brand")
+const issuerDataDIV = document.getElementById("issuer-data")
+const toggleBg = document.getElementById("toggle-bg")
+let issuerData
 
 themeToggler.addEventListener("click", () => {
   let themeState = JSON.parse(themeToggler.dataset.state)
@@ -42,6 +47,19 @@ cardNumberInput.addEventListener("input", (e) => {
 
 })
 
+cardPreview.addEventListener("click", () => {
+  const bgImg = cardPreview.currentStyle || window.getComputedStyle(cardPreview, false)
+  const fileName = bgImg.backgroundImage.split("/").pop().replace(/"\)/, "")
+
+  if (fileName !== `bg.png`) {
+    cardPreview.style.backgroundImage = `url("./assets/img/bgs/bg.png")`
+  } else {
+    if (issuerData && issuerData.issuer) {
+      cardPreview.style.backgroundImage = `url("./assets/img/bgs/${issuerData.issuer}.png")`
+    }
+  }
+})
+
 function formatCardNumber(cardNum) {
   cardNum = String(cardNum)
   let output = ""
@@ -53,17 +71,14 @@ function formatCardNumber(cardNum) {
 
 
 function getIssuerData(bin) {
-  let cardIssuer = document.getElementById("issuer")
-  let cardBrand = document.getElementById("brand")
-  let issuerDataDIV = document.getElementById("issuer-data")
-
-  let issuerData = new Issuer(Number(bin)).getIssuerData()
-
+  issuerData = new Issuer(Number(bin)).getIssuerData()
 
   if (issuerData.issuer) {
     cardIssuer.innerHTML = `<img class="img-fluid img-filter" src="./assets/img/logos/${issuerData.issuer}.png"/>`
     cardBrand.innerHTML = `<img class="img-fluid img-filter" src="./assets/img/${issuerData.brand.toLowerCase()}.png"/>`
     cardPreview.style.backgroundImage = `url("./assets/img/bgs/${issuerData.issuer}.png")`
+    toggleBg.classList.remove("d-none")
+    toggleBg.classList.add("d-flex")
     issuerDataDIV.innerHTML = `<div
     class="mt-3 col-lg-5 d-flex border border-2 p-2 rounded justify-content-evenly align-items-center zoomIn"
     role="button"
@@ -80,7 +95,9 @@ function getIssuerData(bin) {
     cardPreview.style.backgroundImage = `url("./assets/img/bgs/bg.png")`
     cardIssuer.innerHTML = ``
     cardBrand.innerHTML = ``
-    issuerDataDIV.innerHTML = ``
+    toggleBg.classList.add("d-none")
+    toggleBg.classList.remove("d-flex")
+    bin.length === 6 ? issuerDataDIV.innerHTML = `<span class="text-danger d-flex justify-content-center">No Data Found.</span>` : issuerDataDIV.innerHTML = ``
   }
 }
 
