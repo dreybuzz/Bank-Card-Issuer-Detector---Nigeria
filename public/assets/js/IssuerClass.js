@@ -504,8 +504,3 @@ class Issuer {
         return this.constructor.issuerData(this.bin).level || "Issuer Not Found!"
     }
 }
-
-// const issuerDetector = new Issuer(418745)
-
-// console.log(issuerDetector.getIssuer(), issuerDetector.getBrand(), issuerDetector.getType(), issuerDetector.getLevel())
-// console.log(Issuer.allIssuers())
