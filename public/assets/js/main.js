@@ -73,14 +73,14 @@ function getIssuerData(bin) {
     </div>
 
     <div class="col p-3 d-flex justify-content-center">
-      <span class="issuer-data">${issuerData.brand} ${issuerData.type}</span>
+      <span class="issuer-data">${issuerData.brand} ${issuerData.type} ${issuerData.level}</span>
     </div>
   </div>`
   } else {
     cardPreview.style.backgroundImage = `url("./assets/img/bgs/bg.png")`
     cardIssuer.innerHTML = ``
     cardBrand.innerHTML = ``
-    issuerDataDIV.innerHTML = `Invalid Input`
+    issuerDataDIV.innerHTML = ``
   }
 }
 
